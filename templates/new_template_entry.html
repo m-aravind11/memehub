@@ -1,0 +1,31 @@
+{% include "header.html" %}
+
+{% block new_template_form %}
+
+<div class="container">
+    <form method="POST" action="{{ url_for('processTemplateForm') }}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="template"> Upload Template: </label>
+            <input type="file" class="form-control" name="templateImg" accept="image/*" onchange="document.getElementById('image_preview').src = window.URL.createObjectURL(this.files[0])">
+            <img id="image_preview">
+        </div>
+        <div class="form-group">
+            <label for="dialogue"> Dialogue (or) Template Name: </label>
+            <input type="text" class="form-control" name="dialogue_template_name" placeholder="Dialogue in template">
+        </div>
+        <div class="form-group">
+            <label for="movie-name"> Movie: </label>
+            <input type="text" class="form-control" name="movieName" placeholder="Movie Name">
+        </div>
+        <div class="form-group">
+            <label for="tags"> Tags: </label>
+            <input type="text" class="form-control" name="tags" placeholder="Add tags separated by a comma"> 
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </div>
+    </form>
+</div>
+
+{% endblock new_template_form %}
+{% include "footer.html" %}
