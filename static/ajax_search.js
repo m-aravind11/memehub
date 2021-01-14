@@ -12,7 +12,7 @@ $(document).ready(function(){
           $.each(response.result, function(index, template){
             console.log(template.template_filename);
             $("div#searched_query_content").append('<div class="card col-md-3 col-xs-6 col-lg-3 col-sm-6"> \
-                <img class=img-responsive src=uploads/'+ template.template_filename +'/> </div>'
+                <a href=' + template.onClickURL + '> <img class="img-responsive" src=uploads/'+ template.template_filename +'/> </a> </div>'
             );
           });
         }
