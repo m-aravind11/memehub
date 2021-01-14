@@ -11,8 +11,8 @@ $(document).ready(function(){
 
           $.each(response.result, function(index, template){
             console.log(template.template_filename);
-            $("div#searched_query_content").append('<div class="card"> \
-                <img src=uploads/'+ template.template_filename +' width="480px" height="360px"/> </div>' 
+            $("div#searched_query_content").append('<div class="card col-md-3 col-xs-6 col-lg-3 col-sm-6"> \
+                <img class=img-responsive src=uploads/'+ template.template_filename +'/> </div>'
             );
           });
         }

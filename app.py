@@ -35,7 +35,7 @@ def search():
         for result in results:
             filename=result.memeTemplateSavePathURI.split('/')[-1]
             print (filename)
-            response.append({"template_filename":filename})
+            response.append({"template_filename":filename,"dialogue_template_name":result.dialogue_template_name})
 
         return jsonify({"result":response})
 
