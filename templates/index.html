@@ -1,0 +1,14 @@
+{% include "header.html" %}
+
+<script type="text/javascript" src="{{ url_for('static',filename='ajax_search.js') }}" ></script>
+
+<div id="search-bar">
+    <input id="search_query" class="form-control" type="text" placeholder="Start typing Template Name/Dialogue/Actors...">
+    <button id="search_button" type="button" class="btn btn-primary"> Search </button>
+</div>
+
+
+<div id="searched_query_content" class="container"> </div>
+
+
+{% include "footer.html" %}

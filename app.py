@@ -1,17 +1,47 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, jsonify, send_from_directory, redirect, url_for
 from base64 import b64encode
-from models import db,MemeTemplate,MemeTags
+from models import db,MemeTemplate,MemeTag
+from flask_sqlalchemy import Model
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 app.config['SECRET_KEY'] = 'secret'
 
+UPLOAD_FOLDER = os.getcwd()+'/memeTemplateUploads/'
+ALLOWED_EXTENSIONS = {'jpg','jpeg','png'}
+app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER 
 app.app_context().push()
 db.init_app(app)
 
 @app.route('/')
 def index():
-    return 'Hello'
+    return render_template("index.html")
+
+@app.route('/search')
+def search():
+    if (request.args.get('search_query')):
+        data = request.args.get('search_query').lower().strip()
+        results = MemeTemplate.query.join(MemeTag,MemeTemplate.memeID == MemeTag.memeID) \
+                    .filter( (MemeTemplate.dialogue_template_name.ilike('%'+data+'%')) | (MemeTemplate.movieName.ilike('%'+data+'%'))  | (MemeTag.meme_tag.ilike('%'+data+'%'))) \
+                    .all()
+
+        '''results = MemeTemplate.query \
+                .filter( (MemeTemplate.dialogue_template_name.ilike('%'+data+'%')) | (MemeTemplate.movieName.ilike('%'+data+'%'))  ) \
+                .all()'''
+        
+        response=[]
+        for result in results:
+            filename=result.memeTemplateSavePathURI.split('/')[-1]
+            print (filename)
+            response.append({"template_filename":filename})
+
+        return jsonify({"result":response})
+
+@app.route('/uploads/<path:filename>')
+def uploads(filename):
+    return send_from_directory(UPLOAD_FOLDER,filename)
 
 @app.route('/new-template')
 def addNewTemplate():
@@ -21,20 +51,25 @@ def addNewTemplate():
 def processTemplateForm():
     if request.method == 'POST':
         templateImg = request.files.get('templateImg')
-        templateImg_string=b64encode(templateImg.read())
-        dialogue_template_name = request.form['dialogue_template_name']
-        movieName = request.form['movieName']
-        tags = request.form['tags'].split(',')
+        fileExtension = templateImg.filename.split('.')[-1]
+        dialogue_template_name = request.form['dialogue_template_name'].replace(' ','_').lower().strip() + '.' + fileExtension
 
-        meme_record = MemeTemplate(templateImg_string, dialogue_template_name, movieName)
+        movieName = request.form['movieName'].strip()
+        tagsList = request.form['tags'].split(',')
+
+        memeTemplateSavePathURI=os.path.join(app.config['UPLOAD_FOLDER'],dialogue_template_name)
+        templateImg.save(memeTemplateSavePathURI)
+
+        meme_record = MemeTemplate(memeTemplateSavePathURI, dialogue_template_name, movieName)
         db.session.add(meme_record)
-
-        for tag in tags:
-            db.session.add(MemeTags(tag.lower().strip()))
+        db.session.flush()
+        
+        for tag in tagsList:
+            db.session.add(MemeTag(tag.lower().strip(),meme_record.memeID))
     
         db.session.commit()
-        flash ('Record insertion successful!')
-        return 'Submitted!'
+        return redirect(url_for('index'))
 
 if __name__=='__main__':
+    db.create_all()
     app.run('127.0.0.1',port=5000,debug=True)
