@@ -11,9 +11,7 @@ $(document).ready(function(){
 
           $.each(response.result, function(index, template){
             console.log(template.template_filename);
-            $("div#searched_query_content").append('<div class="card col-md-3 col-xs-6 col-lg-3 col-sm-6"> \
-                <a href=' + template.onClickURL + '> <img class="img-responsive" src=uploads/'+ template.template_filename +'/> </a> </div>'
-            );
+            $("div#searched_query_content").append(' <a href=' + template.onClickURL + '> <img class="p-3" src=uploads/'+ template.template_filename +' width=360px height=270px/> </a> </div>');
           });
         }
       });

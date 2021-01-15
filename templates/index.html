@@ -2,15 +2,18 @@
 
 <script type="text/javascript" src="{{ url_for('static',filename='ajax_search.js') }}" ></script>
 
-<div>
-    <button  type="button" class="btn btn-success" onclick="location.href='/new-template'"> <i class="fa fa-plus" aria-hidden="true"></i> Add New Template </button>
+<p class="row">   
+    <button type="button" class="btn btn-success mx-auto" onclick="location.href='/new-template'"> <i class="fa fa-plus" aria-hidden="true"></i> Add New Template </button>
+</p>
+
+
+<div class="container container-fluid">
+    <div class="row justify-content-center" id="search-bar">
+        <input id="search_query" class="col-lg-8" type="text" placeholder="Search by Template Name/Dialogue/Actors..."/>
+        <button id="search_button" type="button" class="btn btn-primary col-lg-2"> <i class="fa fa-search" aria-hidden="true"></i> Search </button>
+    </div>
 </div>
 
-<div id="search-bar">
-    <input id="search_query" class="form-control" type="text" placeholder="Start typing Template Name/Dialogue/Actors...">
-    <button id="search_button" type="button" class="btn btn-primary"> Search </button>
-</div>
-
-<div id="searched_query_content" class="container"> </div>
+<div id="searched_query_content" class="container container-fluid"> </div>
 
 {% include "footer.html" %}
