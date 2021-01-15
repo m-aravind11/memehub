@@ -23,6 +23,7 @@ $("button#search_button").on("click", function(){
       for (var i=0;i<query_suggestions.length;i++){
           search_suggestions.push(query_suggestions[i]);
       }
+      console.log(search_suggestions);
     });
   };
 
