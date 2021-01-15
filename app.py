@@ -6,10 +6,11 @@ from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iobztsjapjlhkq:10af9d6965ef13dbca3b4aa2195f50788f0db49a1add8fb772a4d84181dc6104@ec2-54-163-47-62.compute-1.amazonaws.com:5432/d3fgd14rl7d0tk'
 app.config['SECRET_KEY'] = 'secret'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
-UPLOAD_FOLDER = os.getcwd()+'/memeTemplateUploads/'
+UPLOAD_FOLDER = 'memeTemplateUploads/'
 ALLOWED_EXTENSIONS = {'jpg','jpeg','png'}
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER 
 app.app_context().push()
@@ -89,4 +90,4 @@ def processTemplateForm():
 
 if __name__=='__main__':
     db.create_all()
-    app.run('127.0.0.1',port=5000,debug=False)
+    app.run()
