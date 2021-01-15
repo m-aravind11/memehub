@@ -10,7 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iobztsjapjlhkq:10af9d6965ef1
 app.config['SECRET_KEY'] = 'secret'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
-UPLOAD_FOLDER = '/memeTemplateUploads/'
+UPLOAD_FOLDER = 'memeTemplateUploads/'
 ALLOWED_EXTENSIONS = {'jpg','jpeg','png'}
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER 
 app.app_context().push()
