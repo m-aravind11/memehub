@@ -43,6 +43,19 @@ def search():
     #print (response)
     return jsonify({"result":response})
 
+@app.route('/search-suggestions')
+def searchsuggestions():
+    results = MemeTemplate.query.join(MemeTag,MemeTemplate.memeID == MemeTag.memeID).all()
+    response=set()
+    for result in results:
+        response.add(result.dialogue_template_name)    
+        response.add(result.movieName)  
+        for tag in result.tags:
+            response.add(tag.meme_tag)
+
+        responseList=[x[0].upper()+x[1:] for x in response if x]
+    return jsonify({"result":responseList})
+
 @app.route('/uploads/<path:filename>')
 def uploads(filename):
     return send_from_directory(UPLOAD_FOLDER,filename)

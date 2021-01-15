@@ -1,13 +1,12 @@
-$(document).ready(function(){
-    
-  $("button#search_button").on("click", function(){
+$(document).ready(function(){  
+ 
+$("button#search_button").on("click", function(){
       var search_term=$("input#search_query").val().toLowerCase();
       $.ajax({
         type: "GET",
         url: "/search",
         data: {"search_query" : search_term },
         success: function(response){
-          $("div#searched_query_content").empty();
           $("div#searched_query_content").text=response.result;
 
           $.each(response.result, function(index, template){
@@ -18,26 +17,23 @@ $(document).ready(function(){
       });
   });
 
-  /*var search_suggestions = [];
+  var search_suggestions = [];
+  var search_suggestions = []
 
   function load_suggestions(){
-    $.getJSON('/search', function(query_suggestions,status,xhr){
+    $.getJSON('/search-suggestions', function(query_suggestions,status,xhr){
       query_suggestions=query_suggestions["result"];
       for (var i=0;i<query_suggestions.length;i++){
-        search_suggestions.push((query_suggestions[i].dialogue).charAt(0).toUpperCase() + query_suggestions[i].dialogue.substring(1).toLowerCase() );
-        search_suggestions.push((query_suggestions[i].movie_name).charAt(0).toUpperCase() + query_suggestions[i].movie_name.substring(1).toLowerCase() );
-        tags = query_suggestions[i].tags;
-
-        for (var j=0;j<tags.length;j++){
-          search_suggestions.push(tags[j].charAt(0).toUpperCase() + (tags[j].substring(1)).toLowerCase() );
-        }
+          search_suggestions.push(query_suggestions[i]);
       }
     });
     search_suggestions=[];
   };
 
   load_suggestions();
+
   $("input#search_query").autocomplete({
     source: search_suggestions,
-  });*/
+    minLength:3
+  });
 });
