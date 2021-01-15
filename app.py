@@ -26,18 +26,21 @@ def search():
         results = MemeTemplate.query.join(MemeTag,MemeTemplate.memeID == MemeTag.memeID) \
                     .filter( (MemeTemplate.dialogue_template_name.ilike('%'+data+'%')) | (MemeTemplate.movieName.ilike('%'+data+'%'))  | (MemeTag.meme_tag.ilike('%'+data+'%'))) \
                     .all()
+    else:
+        results=MemeTemplate.query.join(MemeTag,MemeTemplate.memeID == MemeTag.memeID).all()
 
-        '''results = MemeTemplate.query \
-                .filter( (MemeTemplate.dialogue_template_name.ilike('%'+data+'%')) | (MemeTemplate.movieName.ilike('%'+data+'%'))  ) \
-                .all()'''
+    response=[]
+    for result in results:
+        filename=result.memeTemplateSavePathURI.split('/')[-1]
         
-        response=[]
-        for result in results:
-            filename=result.memeTemplateSavePathURI.split('/')[-1]
-            print (filename)
-            response.append({"template_filename":filename,"onClickURL": '/uploads/'+result.dialogue_template_name})
+        response.append({"onClickURL": '/uploads/'+filename, \
+                        "dialogue":result.dialogue_template_name, \
+                        "movie_name":result.movieName, \
+                        "tags":[tagName.meme_tag for tagName in result.tags]
+                        })
 
-        return jsonify({"result":response})
+    #print (response)
+    return jsonify({"result":response})
 
 @app.route('/uploads/<path:filename>')
 def uploads(filename):
@@ -52,12 +55,13 @@ def processTemplateForm():
     if request.method == 'POST':
         templateImg = request.files.get('templateImg')
         fileExtension = templateImg.filename.split('.')[-1]
-        dialogue_template_name = request.form['dialogue_template_name'].replace(' ','_').lower().strip() + '.' + fileExtension
+        dialogue_template_name = request.form['dialogue_template_name']
+        template_image_name = dialogue_template_name.replace(' ','_').lower().strip() + '.' + fileExtension
 
         movieName = request.form['movieName'].strip()
         tagsList = request.form['tags'].split(',')
 
-        memeTemplateSavePathURI=os.path.join(app.config['UPLOAD_FOLDER'],dialogue_template_name)
+        memeTemplateSavePathURI=os.path.join(app.config['UPLOAD_FOLDER'],template_image_name)
         templateImg.save(memeTemplateSavePathURI)
 
         meme_record = MemeTemplate(memeTemplateSavePathURI, dialogue_template_name, movieName)
