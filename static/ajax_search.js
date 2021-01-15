@@ -10,12 +10,11 @@ $("button#search_button").on("click", function(){
           $("div#searched_query_content").text=response.result;
 
           $.each(response.result, function(index, template){
-            console.log(template.filename);
-            $("div#searched_query_content").append(' <a href=' + template.onClickURL + '> <img class="p-3" src='+ template.onClickURL +' width=360px height=270px/> </a> </div>');
+            console.log(template.template_filename);
+            $("div#searched_query_content").append(' <a href=' + template.onClickURL + '> <img class="p-3" src'+ template.onClickURL +' width=360px height=270px/> </a> </div>');
           });
         }
       });
-  });
 
   var search_suggestions = [];
   var search_suggestions = []
@@ -36,4 +35,6 @@ $("button#search_button").on("click", function(){
     source: search_suggestions,
     minLength:3
   });
+});
+
 });
