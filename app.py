@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 import os
 import dropbox
 
-dropbox_access_token='sl.Apf3C5elGg_i42yJhpzR_yQEwug52qZQ981eowduHUemQFWSxiepWbQLZgGz3qdHb3KqzDmafO8hVYa7xF6svkVIBq9crTXwtcJZYzrQW-DzI0zsLJ6RMCRo-hQAbLprxpgMOE8Y'
+dropbox_access_token='gFooMCn0-lMAAAAAAAAAAcrMLIMb6ygl1B3pUrVjoWD8_-jGjU67Hzbf3HZJ633r'
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 app.config['SECRET_KEY'] = 'secret'
@@ -60,7 +60,7 @@ def searchsuggestions():
         for tag in result.tags:
             response.add(tag.meme_tag)
 
-        responseList=[x[0].upper()+x[1:] for x in response if x]
+    responseList=[x[0].upper()+x[1:] for x in response if x]
     return jsonify({"result":responseList})
 
 @app.route('/uploads/<path:filename>')
