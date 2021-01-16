@@ -4,16 +4,27 @@ from models import db,MemeTemplate,MemeTag
 from flask_sqlalchemy import Model
 from werkzeug.utils import secure_filename
 import os
+import dropbox
+
+dropbox_access_token='sl.ApfPG4rQpUHb64UJWZm0RTkfRIIn7lDDOd7LKPF4CvdX2AyIConyJFcWrYtbuAzKJKowXJD1HAVhJtv6G7sp52CstK0fJ1DvBZdMW_LZVM70dY8EJvHN1IG6H_G-2h4fvoBulOvF'
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iobztsjapjlhkq:10af9d6965ef13dbca3b4aa2195f50788f0db49a1add8fb772a4d84181dc6104@ec2-54-163-47-62.compute-1.amazonaws.com:5432/d3fgd14rl7d0tk'
 app.config['SECRET_KEY'] = 'secret'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
-UPLOAD_FOLDER = os.getcwd()+'/memeTemplateUploads/'
+UPLOAD_FOLDER = 'memeTemplateUploads/'
 ALLOWED_EXTENSIONS = {'jpg','jpeg','png'}
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER 
 app.app_context().push()
 db.init_app(app)
+
+def returnSharedLink_UploadFileInDropbox(file_from, file_to):
+    dbx = dropbox.Dropbox(dropbox_access_token)
+    with open(file_from,'rb') as f:
+        dbx.files_upload(f.read(), file_to)    
+    shared_link_metadata = dbx.sharing_create_shared_link_with_settings(file_to)
+    return shared_link_metadata.url
 
 @app.route('/')
 def index():
@@ -26,18 +37,33 @@ def search():
         results = MemeTemplate.query.join(MemeTag,MemeTemplate.memeID == MemeTag.memeID) \
                     .filter( (MemeTemplate.dialogue_template_name.ilike('%'+data+'%')) | (MemeTemplate.movieName.ilike('%'+data+'%'))  | (MemeTag.meme_tag.ilike('%'+data+'%'))) \
                     .all()
+    else:
+        results=MemeTemplate.query.join(MemeTag,MemeTemplate.memeID == MemeTag.memeID).all()
 
-        '''results = MemeTemplate.query \
-                .filter( (MemeTemplate.dialogue_template_name.ilike('%'+data+'%')) | (MemeTemplate.movieName.ilike('%'+data+'%'))  ) \
-                .all()'''
+    response=[]
+    for result in results:
+        filename=result.memeTemplateSavePathURI.split('/')[-1]
         
-        response=[]
-        for result in results:
-            filename=result.memeTemplateSavePathURI.split('/')[-1]
-            print (filename)
-            response.append({"template_filename":filename,"onClickURL": '/uploads/'+result.dialogue_template_name})
+        response.append({"onClickURL": result.memeTemplateSavePathURI, \
+                        "dialogue":result.dialogue_template_name, \
+                        "movie_name":result.movieName, \
+                        "tags":[tagName.meme_tag for tagName in result.tags]
+                        })
 
-        return jsonify({"result":response})
+    return jsonify({"result":response})
+
+@app.route('/search-suggestions')
+def searchsuggestions():
+    results = MemeTemplate.query.join(MemeTag,MemeTemplate.memeID == MemeTag.memeID).all()
+    response=set()
+    for result in results:
+        response.add(result.dialogue_template_name)    
+        response.add(result.movieName)  
+        for tag in result.tags:
+            response.add(tag.meme_tag)
+
+        responseList=[x[0].upper()+x[1:] for x in response if x]
+    return jsonify({"result":responseList})
 
 @app.route('/uploads/<path:filename>')
 def uploads(filename):
@@ -52,13 +78,18 @@ def processTemplateForm():
     if request.method == 'POST':
         templateImg = request.files.get('templateImg')
         fileExtension = templateImg.filename.split('.')[-1]
-        dialogue_template_name = request.form['dialogue_template_name'].replace(' ','_').lower().strip() + '.' + fileExtension
+        dialogue_template_name = request.form['dialogue_template_name']
+        template_image_name = dialogue_template_name.replace(' ','_').lower().strip() + '.' + fileExtension
 
         movieName = request.form['movieName'].strip()
         tagsList = request.form['tags'].split(',')
 
-        memeTemplateSavePathURI=os.path.join(app.config['UPLOAD_FOLDER'],dialogue_template_name)
-        templateImg.save(memeTemplateSavePathURI)
+        localTemplateSavePathURI=os.path.join(app.config['UPLOAD_FOLDER'],template_image_name)
+        templateImg.save(localTemplateSavePathURI)
+        
+        dropbox_upload_filename = '/' + template_image_name
+        memeTemplateSavePathURI = returnSharedLink_UploadFileInDropbox (localTemplateSavePathURI,dropbox_upload_filename)
+        memeTemplateSavePathURI = memeTemplateSavePathURI.replace('dl=0','dl=1')
 
         meme_record = MemeTemplate(memeTemplateSavePathURI, dialogue_template_name, movieName)
         db.session.add(meme_record)
@@ -72,4 +103,4 @@ def processTemplateForm():
 
 if __name__=='__main__':
     db.create_all()
-    app.run('127.0.0.1',port=5000,debug=False)
+    app.run()
