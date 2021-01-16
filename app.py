@@ -6,8 +6,7 @@ from werkzeug.utils import secure_filename
 import os
 import dropbox
 
-dropbox_access_token='sl.ApfPG4rQpUHb64UJWZm0RTkfRIIn7lDDOd7LKPF4CvdX2AyIConyJFcWrYtbuAzKJKowXJD1HAVhJtv6G7sp52CstK0fJ1DvBZdMW_LZVM70dY8EJvHN1IG6H_G-2h4fvoBulOvF'
-
+dropbox_access_token='sl.Apf3C5elGg_i42yJhpzR_yQEwug52qZQ981eowduHUemQFWSxiepWbQLZgGz3qdHb3KqzDmafO8hVYa7xF6svkVIBq9crTXwtcJZYzrQW-DzI0zsLJ6RMCRo-hQAbLprxpgMOE8Y'
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test1.db'
 app.config['SECRET_KEY'] = 'secret'
