@@ -10,7 +10,7 @@ $("button#search_button").on("click", function(){
           $("div#searched_query_content").empty();
 
           $.each(response.result, function(index, template){
-            var htmlcard='<div class="m-2 col-5 template-card-search border border-secondary rounded"> \
+            var htmlcard='<div class="m-2 col-lg-4 template-card-search border border-secondary rounded flex-wrap"> \
               <img class="template-card-search-image mx-auto" src="' +  template.onClickURL + '"alt="Card image" width=360px height=270px/> \
               <div class="card-body"> \
                 <h4 class="card-title">' + template.dialogue + '</h4> \
