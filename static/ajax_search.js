@@ -11,7 +11,7 @@ $("button#search_button").on("click", function(){
 
           $.each(response.result, function(index, template){
             var htmlcard='<div class="m-2 template-card-search border border-secondary rounded flex-wrap"> \
-              <img class="template-card-search-image mx-auto" src="' +  template.onClickURL + '"alt="Card image"/> \
+              <img class="template-card-search-image" src="' +  template.onClickURL + '"alt="Card image"/> \
               <div class="card-body"> \
                 <h4 class="card-title">' + template.dialogue + '</h4> \
                 <div class="card-text"> <label class="font-weight-bold" for="movie_template_name">' + "Movie/Template Name:" + '</label> ' + template.movie_name + '</div> \
