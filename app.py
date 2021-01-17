@@ -7,10 +7,7 @@ import os
 import dropbox
 
 dropbox_access_token='gFooMCn0-lMAAAAAAAAAAcrMLIMb6ygl1B3pUrVjoWD8_-jGjU67Hzbf3HZJ633r'
-<<<<<<< HEAD
 
-=======
->>>>>>> 638bbd8965ac1dffc47dc7ac019e4e5235b0d438
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://iobztsjapjlhkq:10af9d6965ef13dbca3b4aa2195f50788f0db49a1add8fb772a4d84181dc6104@ec2-54-163-47-62.compute-1.amazonaws.com:5432/d3fgd14rl7d0tk'
 app.config['SECRET_KEY'] = 'secret'
@@ -108,8 +105,5 @@ def processTemplateForm():
 
 if __name__=='__main__':
     db.create_all()
-<<<<<<< HEAD
     app.run()
-=======
-    app.run('127.0.0.1',port=5000,debug=True)
->>>>>>> 638bbd8965ac1dffc47dc7ac019e4e5235b0d438
+
