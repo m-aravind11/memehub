@@ -10,8 +10,8 @@ $("button#search_button").on("click", function(){
           $("div#searched_query_content").empty();
 
           $.each(response.result, function(index, template){
-            var htmlcard='<div class="m-2 col-lg-4 template-card-search border border-secondary rounded flex-wrap"> \
-              <img class="template-card-search-image mx-auto" src="' +  template.onClickURL + '"alt="Card image" width=360px height=270px/> \
+            var htmlcard='<div class="m-2 template-card-search border border-secondary rounded flex-wrap"> \
+              <img class="template-card-search-image mx-auto" src="' +  template.onClickURL + '"alt="Card image"/> \
               <div class="card-body"> \
                 <h4 class="card-title">' + template.dialogue + '</h4> \
                 <div class="card-text"> <label class="font-weight-bold" for="movie_template_name">' + "Movie/Template Name:" + '</label> ' + template.movie_name + '</div> \

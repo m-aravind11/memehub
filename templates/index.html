@@ -1,7 +1,7 @@
 {% include "header.html" %}
 
 <script type="text/javascript" src="{{ url_for('static',filename='ajax_search.js') }}" ></script>
-
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='style.css') }}">
 {% include "top-navbar.html" %}
 
 <p class="d-flex align-items-center mt-3">
@@ -15,6 +15,6 @@
     </div>
 </div>
 
-<div id="searched_query_content" class="p-4 container container-fluid d-flex flex-wrap mx-auto"> </div>
+<div id="searched_query_content" class="container container-fluid d-flex flex-wrap mx-auto"> </div>
 
 {% include "footer.html" %}
