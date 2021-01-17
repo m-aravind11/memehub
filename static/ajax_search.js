@@ -24,7 +24,18 @@ $("button#search_button").on("click", function(){
         }
       });
     });
-  
+
+    var search_suggestions = []
+
+    function load_suggestions(){
+      $.getJSON('/search-suggestions', function(query_suggestions,status,xhr){
+        query_suggestions=query_suggestions["result"];
+        for (var i=0;i<query_suggestions.length;i++){
+            search_suggestions.push(query_suggestions[i]);
+        }
+      });
+    };
+    
     load_suggestions();
   
     $("input#search_query").autocomplete({
