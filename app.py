@@ -42,10 +42,12 @@ def search():
     for result in results:
         filename=result.memeTemplateSavePathURI.split('/')[-1]
         
+        tags_string = ", ".join([tagName.meme_tag[0].upper() + tagName.meme_tag[1:] for tagName in result.tags])
+        
         response.append({"onClickURL": result.memeTemplateSavePathURI, \
                         "dialogue":result.dialogue_template_name, \
                         "movie_name":result.movieName, \
-                        "tags":[tagName.meme_tag for tagName in result.tags]
+                        "tags": tags_string, \
                         })
 
     return jsonify({"result":response})
@@ -101,4 +103,4 @@ def processTemplateForm():
 
 if __name__=='__main__':
     db.create_all()
-    app.run('127.0.0.1',port=5000,debug=False)
+    app.run('127.0.0.1',port=5000,debug=True)

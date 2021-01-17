@@ -1,27 +1,28 @@
 {% include "header.html" %}
+{% include "top-navbar.html" %}
 
 {% block new_template_form %}
 
-<div class="container">
-    <form method="POST" action="{{ url_for('processTemplateForm') }}" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="template"> Upload Template: </label>
+<div class="container d-flex h-100">
+    <form method="POST" class="m-auto" action="{{ url_for('processTemplateForm') }}" enctype="multipart/form-data">
+        <div class="form-group mt-2 row">
+            <kbd class="h6" for="template"> Upload Template </kbd>
             <input id="templateUpload" type="file" class="form-control" name="templateImg" accept="image/*" onchange="document.getElementById('image_preview').src = window.URL.createObjectURL(this.files[0]);" required>
-            <img id="image_preview" width="480px" height="360px" alt="Template Preview">
+            <img src="{{ url_for('static',filename='images/image_placeholder_dark.png')}}" class="img-fluid mx-auto d-block m-2" id="image_preview" width="400px" height="300px">
         </div>
-        <div class="form-group">
-            <label for="dialogue"> Dialogue (or) Template Name: </label>
+        <div class="form-group mt-2">
+            <kbd class="h6" for="dialogue"> Dialogue/Template Name </kbd>
             <input type="text" class="form-control" name="dialogue_template_name" placeholder="Dialogue in template" required>
         </div>
-        <div class="form-group">
-            <label for="movie-name"> Movie: </label>
+        <div class="form-group mt-2">
+            <kbd class="h6" for="movie-name"> Movie </kbd>
             <input type="text" class="form-control" name="movieName" placeholder="Movie Name">
         </div>
-        <div class="form-group">
-            <label for="tags"> Tags: </label>
+        <div class="form-group mt-2">
+            <kbd class="h6" for="tags"> Tags </kbd>
             <input type="text" class="form-control" name="tags" placeholder="Add tags separated by a comma"> 
         </div>
-        <div class="form-group">
+        <div class="form-group text-center m-auto">
             <input type="submit" class="btn btn-primary" value="Submit">
         </div>
     </form>

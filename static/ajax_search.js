@@ -10,8 +10,16 @@ $("button#search_button").on("click", function(){
           $("div#searched_query_content").empty();
 
           $.each(response.result, function(index, template){
-            console.log(template.template_filename);
-            $("div#searched_query_content").append(' <a href=' + template.onClickURL + ' target="_blank"> <img class="p-3" src='+ template.onClickURL +' width=360px height=270px/> </a> </div>');
+            var htmlcard='<div class="col-lg-4 m-2 template-card-search border border-secondary rounded"> \
+              <img class="template-card-search-image m-1 text-center" src=' +  template.onClickURL + 'alt="Card image"/> \
+              <div class="card-body"> \
+                <h4 class="card-title">' + template.dialogue + '</h4> \
+                <div class="card-text"> <label class="font-weight-bold" for="movie_template_name">' + "Movie/Template Name:" + '</label> ' + template.movie_name + '</div> \
+                <div class="card-text"> <label class="font-weight-bold" for="tags">' + "Tags:" + '</label> ' + template.tags + '</div> \
+              </div> \
+            </div>';
+            
+            $("div#searched_query_content").append(htmlcard);
           });
         }
       });
