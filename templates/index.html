@@ -2,18 +2,19 @@
 
 <script type="text/javascript" src="{{ url_for('static',filename='ajax_search.js') }}" ></script>
 
-<p class="row">   
-    <button type="button" class="btn btn-success mx-auto" onclick="location.href='/new-template'"> <i class="fa fa-plus" aria-hidden="true"></i> Add New Template </button>
+{% include "top-navbar.html" %}
+
+<p class="d-flex align-items-center mt-3">
+    <button type="button" class="btn btn-danger mx-auto" onclick="location.href='/new-template'"> <i class="fa fa-plus" aria-hidden="true"></i> Add New Template </button>  
 </p>
 
-
-<div class="container container-fluid">
-    <div class="row justify-content-center" id="search-bar">
+<div class="container container-fluid mt-2 ml-auto mr-auto">
+    <div class="row justify-content-center m-1" id="search-bar">
         <input id="search_query" class="col-lg-8" type="text" placeholder="Start typing Template Name/Dialogue/Keywords"/>
-        <button id="search_button" type="button" class="btn btn-primary col-lg-2"> <i class="fa fa-search" aria-hidden="true"></i> Search </button>
+        <button id="search_button" type="button" class="btn btn-dark col-lg-2 p-2"> <i class="fa fa-search" aria-hidden="true"></i> Search </button>
     </div>
 </div>
 
-<div id="searched_query_content" class="container container-fluid"> </div>
+<div id="searched_query_content" class="p-4 container container-fluid d-flex flex-wrap"> </div>
 
 {% include "footer.html" %}
